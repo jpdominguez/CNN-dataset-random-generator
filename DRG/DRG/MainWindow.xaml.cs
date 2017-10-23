@@ -33,34 +33,24 @@ namespace DRG
 
             file_dialog_labelsPath = new OpenFileDialog();
             folder_dialog_imagesPath = new CommonOpenFileDialog();
-            /*
-            DirectoryInfo directory = new DirectoryInfo(path);
-            DirectoryInfo[] directories = directory.GetDirectories();
-
-            foreach (DirectoryInfo folder in directories)
-            {
-
-
-                var files_in_path = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories).Where(s => s.Contains(System.IO.Path.GetExtension(".jpg")) && !s.Contains("processed"));
-
-
-
-                System.IO.Directory.CreateDirectory("generated_images");
-                Utilities.grant_access("generated_images");
-            }
-            */
         }
 
         #region EventHandlers
         private void slider_Train_MouseMove(object sender, MouseEventArgs e)
         {
-            slider_Validation.Value = 100 - slider_Train.Value - slider_Test.Value;
+            if (checkbox_Validation.IsChecked == true)
+            {
+                slider_Validation.Value = 100 - slider_Train.Value - slider_Test.Value;
+            }
             slider_Test.Value = 100 - slider_Train.Value - slider_Validation.Value;
         }
 
         private void slider_Test_MouseMove(object sender, MouseEventArgs e)
         {
-            slider_Validation.Value = 100 - slider_Train.Value - slider_Test.Value;
+            if (checkbox_Validation.IsChecked == true)
+            {
+                slider_Validation.Value = 100 - slider_Train.Value - slider_Test.Value;
+            }
             slider_Train.Value = 100 - slider_Test.Value - slider_Validation.Value;
         }
 
@@ -109,44 +99,75 @@ namespace DRG
 
         private void button_Launch_Click(object sender, RoutedEventArgs e)
         {
-            var files_in_path = Directory.GetFiles(folder_dialog_imagesPath.FileName, "*.*", SearchOption.AllDirectories).Where(s => s.Contains(System.IO.Path.GetExtension(".jpg")) || s.Contains(System.IO.Path.GetExtension(".png")));
+            CommonOpenFileDialog folder_dialog_savePath = new CommonOpenFileDialog();
+            folder_dialog_savePath.IsFolderPicker = true;
+            StringBuilder builder = new StringBuilder();
 
-            List<string> all_files = new List<string>(files_in_path);
-
-            int number_trainImages = files_in_path.Count() * (int)slider_Train.Value/100;
-            int number_validationImages = files_in_path.Count() * (int)slider_Validation.Value / 100;
-            int number_testImages = files_in_path.Count() * (int)slider_Test.Value / 100;
-
-            List<string> list_train_images = new List<string>();
-            List<string> list_validation_images = new List<string>();
-            List<string> list_test_images = new List<string>();
-
-            Random rnd = new Random();
-
-            int random_number;
-
-            for (int i = 0; i < number_trainImages; i++)
+            if (folder_dialog_savePath.ShowDialog() == CommonFileDialogResult.Ok)
             {
-                random_number = rnd.Next(all_files.Count());
+                System.IO.Directory.CreateDirectory(folder_dialog_savePath.FileName + "\\generated_DB");
+                Utilities.grant_access(folder_dialog_savePath.FileName + "\\generated_DB");
+                System.IO.Directory.CreateDirectory(folder_dialog_savePath.FileName + "\\generated_DB\\train");
+                Utilities.grant_access(folder_dialog_savePath.FileName + "\\generated_DB\\train");
+                System.IO.Directory.CreateDirectory(folder_dialog_savePath.FileName + "\\generated_DB\\test");
+                Utilities.grant_access(folder_dialog_savePath.FileName + "\\generated_DB\\test");
+                if (checkbox_Validation.IsChecked == true)
+                {
+                    System.IO.Directory.CreateDirectory(folder_dialog_savePath.FileName + "\\generated_DB\\validation");
+                    Utilities.grant_access(folder_dialog_savePath.FileName + "\\generated_DB\\validation");
+                }
 
-                list_train_images.Add(all_files[random_number]);
-                all_files.RemoveAt(random_number);
-            }
 
-            for (int i = 0; i < number_validationImages; i++)
-            {
-                random_number = rnd.Next(all_files.Count());
+                var files_in_path = Directory.GetFiles(folder_dialog_imagesPath.FileName, "*.*", SearchOption.AllDirectories).Where(s => s.Contains(System.IO.Path.GetExtension(".jpg")) || s.Contains(System.IO.Path.GetExtension(".png")));
 
-                list_validation_images.Add(all_files[random_number]);
-                all_files.RemoveAt(random_number);
-            }
+                List<string> all_files = new List<string>(files_in_path);
 
-            for (int i = 0; i < number_testImages; i++)
-            {
-                random_number = rnd.Next(all_files.Count());
+                int number_trainImages = files_in_path.Count() * (int)slider_Train.Value / 100;
+                int number_validationImages = files_in_path.Count() * (int)slider_Validation.Value / 100;
+                int number_testImages = files_in_path.Count() * (int)slider_Test.Value / 100;
 
-                list_test_images.Add(all_files[random_number]);
-                all_files.RemoveAt(random_number);
+                List<string> list_train_images = new List<string>();
+                List<string> list_validation_images = new List<string>();
+                List<string> list_test_images = new List<string>();
+
+                Random rnd = new Random();
+
+                int random_number;
+
+                for (int i = 0; i < number_trainImages; i++)
+                {
+                    random_number = rnd.Next(all_files.Count());
+
+                    list_train_images.Add(all_files[random_number]);
+                    System.IO.File.Copy(all_files[random_number], folder_dialog_savePath.FileName + "\\generated_DB\\train\\" + all_files[random_number].Split('\\')[all_files[random_number].Split('\\').Count()-1]);
+
+
+                    builder.Append(i).Append(" ");
+                    File.AppendAllText(folder_dialog_savePath.FileName + "\\generated_DB", builder.ToString());
+
+                    all_files.RemoveAt(random_number);
+                }
+
+                for (int i = 0; i < number_testImages; i++)
+                {
+                    random_number = rnd.Next(all_files.Count());
+
+                    list_test_images.Add(all_files[random_number]);
+                    System.IO.File.Copy(all_files[random_number], folder_dialog_savePath.FileName + "\\generated_DB\\test\\" + all_files[random_number].Split('\\')[all_files[random_number].Split('\\').Count() - 1]);
+                    all_files.RemoveAt(random_number);
+                }
+
+                if (checkbox_Validation.IsChecked == true)
+                {
+                    for (int i = 0; i < number_validationImages; i++)
+                    {
+                        random_number = rnd.Next(all_files.Count());
+
+                        list_validation_images.Add(all_files[random_number]);
+                        System.IO.File.Copy(all_files[random_number], folder_dialog_savePath.FileName + "\\generated_DB\\validation\\" + all_files[random_number].Split('\\')[all_files[random_number].Split('\\').Count() - 1]);
+                        all_files.RemoveAt(random_number);
+                    }
+                }
             }
         }
     }
