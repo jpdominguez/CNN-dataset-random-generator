@@ -101,7 +101,7 @@ namespace DRG
         {
             CommonOpenFileDialog folder_dialog_savePath = new CommonOpenFileDialog();
             folder_dialog_savePath.IsFolderPicker = true;
-            StringBuilder builder = new StringBuilder();
+            StringBuilder stringbuilder_saveLabels = new StringBuilder();
 
             if (folder_dialog_savePath.ShowDialog() == CommonFileDialogResult.Ok)
             {
@@ -142,8 +142,8 @@ namespace DRG
                     System.IO.File.Copy(all_files[random_number], folder_dialog_savePath.FileName + "\\generated_DB\\train\\" + all_files[random_number].Split('\\')[all_files[random_number].Split('\\').Count()-1]);
 
 
-                    builder.Append(i).Append(" ");
-                    File.AppendAllText(folder_dialog_savePath.FileName + "\\generated_DB", builder.ToString());
+                    stringbuilder_saveLabels.Append(i).Append(Utilities.getLabel(file_dialog_labelsPath.FileName, all_files[random_number]));
+                    File.AppendAllText(folder_dialog_savePath.FileName + "\\generated_DB\\train.txt", stringbuilder_saveLabels.ToString());
 
                     all_files.RemoveAt(random_number);
                 }
