@@ -1,0 +1,45 @@
+﻿<Window x:Class="DRG.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DRG"
+        mc:Ignorable="d"
+        Title="DRG - Dataset Random Generator" Height="350" Width="525">
+    <DockPanel>
+        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Vertical" Margin="20" VerticalAlignment="Top">
+                <StackPanel Orientation="Horizontal" Margin=" 0 0 0 10">
+                    <Button x:Name="btn_imageFolder" Width="120" Click="btn_imageFolder_Click">Select images folder</Button>
+                    <TextBlock x:Name="textblock_imageFolder" Margin="20 0 20 0"></TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="btn_labels" Width="120" Click="btn_labels_Click">Select labels file</Button>
+                    <TextBlock x:Name="textblock_labelsFile" Margin="20 0 20 0"></TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0 20 0 0">
+                    <CheckBox x:Name="checkbox_Validation" IsChecked="True" Checked="checkbox_Validation_Checked" Unchecked="checkbox_Validation_Unchecked">Validation?</CheckBox>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Margin="0 10 0 0">
+                
+                <StackPanel Orientation="Horizontal" Margin="0 0 0 20">
+                    <TextBlock Margin="0 0 20 0" Width="70" TextAlignment="Right">Train:</TextBlock>
+                    <Slider x:Name="slider_Train" Orientation="Horizontal" Minimum="0" Maximum="100"  Width="300" Value="85" IsSnapToTickEnabled="True" TickFrequency="1" MouseMove="slider_Train_MouseMove"/>
+                    <TextBlock Text="{Binding ElementName=slider_Train,Path=Value, StringFormat={}{0}%}" Margin="10 0 0 0"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0 0 0 20" x:Name="stackpanel_Validation">
+                    <TextBlock Margin="0 0 20 0" Width="70" TextAlignment="Right">Validation:</TextBlock>
+                    <Slider x:Name="slider_Validation" Orientation="Horizontal" Minimum="0" Maximum="100" Width="300" Value="0" IsSnapToTickEnabled="True" TickFrequency="1" MouseMove="slider_Validation_MouseMove"></Slider>
+                    <TextBlock Text="{Binding ElementName=slider_Validation,Path=Value, StringFormat={}{0}%}" Margin="10 0 0 0"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0 0 0 20">
+                    <TextBlock Margin="0 0 20 0" Width="70" TextAlignment="Right">Test:</TextBlock>
+                    <Slider x:Name="slider_Test" Orientation="Horizontal" Minimum="0" Maximum="100" Width="300" Value="15" IsSnapToTickEnabled="True" TickFrequency="1" MouseMove="slider_Test_MouseMove"/>
+                    <TextBlock Text="{Binding ElementName=slider_Test,Path=Value, StringFormat={}{0}%}" Margin="10 0 0 0"/>
+                </StackPanel>
+            </StackPanel>
+            <Button x:Name="button_Launch" Width="100" Height="30" Click="button_Launch_Click" >Launch</Button>
+        </StackPanel>
+    </DockPanel>
+</Window>
