@@ -23,9 +23,10 @@ namespace DRG.src
         {
             //StreamReader reader = new StreamReader(path);
             //List<String> lines = new List<string>();
-            StringBuilder lines = new StringBuilder();
+            //StringBuilder lines = new StringBuilder();
             string label_res = "NULL";
             string buffer = string.Empty;
+            /*
             using (StreamReader reader = new StreamReader(path, true))
             {
                 while (!reader.EndOfStream)
@@ -42,6 +43,16 @@ namespace DRG.src
                     }
                 }
             }
+            */
+            List<string> lines = File.ReadAllLines(path).ToList();
+
+            if (lines.Any(x => x.Contains(imageName.Split('\\')[imageName.Split('\\').Count() - 1])))
+            {
+                var ind = lines.FindIndex(x => x.Contains(imageName.Split('\\')[imageName.Split('\\').Count() - 1]));
+                
+                label_res = lines.ElementAt(ind);
+                lines.RemoveAt(ind);
+            }
 
             //reader.Close();
             //reader.Dispose();
@@ -55,9 +66,9 @@ namespace DRG.src
                 */
 
             File.Delete(path);
-            File.AppendAllText(path, lines.ToString());
-                //File.WriteAllLines(path, lines.ToArray());
-                return label_res;
+            File.AppendAllLines(path, lines);
+            //File.WriteAllLines(path, lines.ToArray());
+            return label_res;
         }
     }
 }

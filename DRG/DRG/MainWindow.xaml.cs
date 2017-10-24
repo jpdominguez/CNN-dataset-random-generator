@@ -33,6 +33,9 @@ namespace DRG
 
             file_dialog_labelsPath = new OpenFileDialog();
             folder_dialog_imagesPath = new CommonOpenFileDialog();
+            file_dialog_labelsPath.Title = "Select labels file";
+            folder_dialog_imagesPath.Title = "Select the folder that contains the images";
+            file_dialog_labelsPath.Filter = "Text files (*.csv, *.txt) | *.csv; *.txt";
         }
 
         #region EventHandlers
@@ -101,6 +104,8 @@ namespace DRG
         {
             CommonOpenFileDialog folder_dialog_savePath = new CommonOpenFileDialog();
             folder_dialog_savePath.IsFolderPicker = true;
+            folder_dialog_savePath.Title = "Select a folder to save the output dataset";
+
             StringBuilder stringbuilder_saveLabels = new StringBuilder();
 
             if (folder_dialog_savePath.ShowDialog() == CommonFileDialogResult.Ok)
@@ -116,6 +121,8 @@ namespace DRG
                     System.IO.Directory.CreateDirectory(folder_dialog_savePath.FileName + "\\generated_DB\\validation");
                     Utilities.grant_access(folder_dialog_savePath.FileName + "\\generated_DB\\validation");
                 }
+
+                File.Copy(file_dialog_labelsPath.FileName, file_dialog_labelsPath.FileName + "_bkp");
 
 
                 var files_in_path = Directory.GetFiles(folder_dialog_imagesPath.FileName, "*.*", SearchOption.AllDirectories).Where(s => s.Contains(System.IO.Path.GetExtension(".jpg")) || s.Contains(System.IO.Path.GetExtension(".png")));
@@ -143,10 +150,13 @@ namespace DRG
 
 
                     stringbuilder_saveLabels.Append(i).Append(Utilities.getLabel(file_dialog_labelsPath.FileName, all_files[random_number]));
-                    File.AppendAllText(folder_dialog_savePath.FileName + "\\generated_DB\\train.txt", stringbuilder_saveLabels.ToString());
+                    
 
                     all_files.RemoveAt(random_number);
                 }
+
+                File.AppendAllText(folder_dialog_savePath.FileName + "\\generated_DB\\train.txt", stringbuilder_saveLabels.ToString());
+                stringbuilder_saveLabels.Clear();
 
                 for (int i = 0; i < number_testImages; i++)
                 {
@@ -154,8 +164,14 @@ namespace DRG
 
                     list_test_images.Add(all_files[random_number]);
                     System.IO.File.Copy(all_files[random_number], folder_dialog_savePath.FileName + "\\generated_DB\\test\\" + all_files[random_number].Split('\\')[all_files[random_number].Split('\\').Count() - 1]);
+
+                    stringbuilder_saveLabels.Append(i).Append(Utilities.getLabel(file_dialog_labelsPath.FileName, all_files[random_number]));
+
                     all_files.RemoveAt(random_number);
                 }
+
+                File.AppendAllText(folder_dialog_savePath.FileName + "\\generated_DB\\test.txt", stringbuilder_saveLabels.ToString());
+                stringbuilder_saveLabels.Clear();
 
                 if (checkbox_Validation.IsChecked == true)
                 {
