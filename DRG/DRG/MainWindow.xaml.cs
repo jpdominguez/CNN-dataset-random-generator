@@ -36,6 +36,9 @@ namespace DRG
             file_dialog_labelsPath.Title = "Select labels file";
             folder_dialog_imagesPath.Title = "Select the folder that contains the images";
             file_dialog_labelsPath.Filter = "Text files (*.csv, *.txt) | *.csv; *.txt";
+
+            textblock_imageFolder.Text = "No file selected";
+            textblock_labelsFile.Text = "No file selected";
         }
 
         #region EventHandlers

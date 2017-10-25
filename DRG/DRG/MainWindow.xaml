@@ -5,17 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DRG"
         mc:Ignorable="d"
-        Title="DRG - Dataset Random Generator" Height="350" Width="525">
+        Title="DRG - Dataset Random Generator" Height="340" Width="475" ResizeMode="NoResize">
     <DockPanel>
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Vertical" Margin="20" VerticalAlignment="Top">
                 <StackPanel Orientation="Horizontal" Margin=" 0 0 0 10">
                     <Button x:Name="btn_imageFolder" Width="120" Click="btn_imageFolder_Click">Select images folder</Button>
-                    <TextBlock x:Name="textblock_imageFolder" Margin="20 0 20 0"></TextBlock>
+                    <TextBlock x:Name="textblock_imageFolder" Margin="20 0 20 0" VerticalAlignment="Center"></TextBlock>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Button x:Name="btn_labels" Width="120" Click="btn_labels_Click">Select labels file</Button>
-                    <TextBlock x:Name="textblock_labelsFile" Margin="20 0 20 0"></TextBlock>
+                    <TextBlock x:Name="textblock_labelsFile" Margin="20 0 20 0" VerticalAlignment="Center"></TextBlock>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0 20 0 0">
                     <CheckBox x:Name="checkbox_Validation" IsChecked="True" Checked="checkbox_Validation_Checked" Unchecked="checkbox_Validation_Unchecked">Validation?</CheckBox>
