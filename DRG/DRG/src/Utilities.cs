@@ -11,6 +11,9 @@ namespace DRG.src
 {
     public static class Utilities
     {
+        public static List<string> labelsList;
+        public static List<string> labelsList_used;
+
         public static void grant_access(string fullPath)
         {
             DirectoryInfo dInfo = new DirectoryInfo(fullPath);
@@ -69,6 +72,27 @@ namespace DRG.src
             File.AppendAllLines(path, lines);
             //File.WriteAllLines(path, lines.ToArray());
             return label_res;
+        }
+
+
+
+        public static void getLabels(string path)
+        {
+            labelsList = File.ReadAllLines(path).ToList();
+        }
+
+        public static string findLabel(string imageName)
+        {
+            var ind = labelsList.FindIndex(x => x.Contains(imageName.Split('\\')[imageName.Split('\\').Count() - 1]));
+            //var ind = labelsList.Find(x => !labelsList_used.Contains(x) && x.Contains(imageName.Split('\\')[imageName.Split('\\').Count() - 1]));
+
+
+            //var ind2 = labelsList.Select((Value, Index) => new { Value, Index }).Single(p => !labelsList_used.Contains(p.Value) && p.Value.Contains(imageName.Split('\\')[imageName.Split('\\').Count() - 1]));
+            //labelsList_used.Add(ind);
+            //labelsList.RemoveAt(ind2.Index);
+            var res = labelsList.ElementAt(ind);
+            labelsList.RemoveAt(ind);
+            return res;
         }
     }
 }

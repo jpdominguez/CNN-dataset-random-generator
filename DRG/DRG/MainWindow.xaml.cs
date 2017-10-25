@@ -39,6 +39,8 @@ namespace DRG
 
             textblock_imageFolder.Text = "No file selected";
             textblock_labelsFile.Text = "No file selected";
+
+            Utilities.labelsList_used = new List<string>();
         }
 
         #region EventHandlers
@@ -126,6 +128,7 @@ namespace DRG
                 }
 
                 File.Copy(file_dialog_labelsPath.FileName, file_dialog_labelsPath.FileName + "_bkp");
+                Utilities.getLabels(file_dialog_labelsPath.FileName);
 
 
                 var files_in_path = Directory.GetFiles(folder_dialog_imagesPath.FileName, "*.*", SearchOption.AllDirectories).Where(s => s.Contains(System.IO.Path.GetExtension(".jpg")) || s.Contains(System.IO.Path.GetExtension(".png")));
@@ -152,8 +155,8 @@ namespace DRG
                     System.IO.File.Copy(all_files[random_number], folder_dialog_savePath.FileName + "\\generated_DB\\train\\" + all_files[random_number].Split('\\')[all_files[random_number].Split('\\').Count()-1]);
 
 
-                    stringbuilder_saveLabels.Append(i).Append(Utilities.getLabel(file_dialog_labelsPath.FileName, all_files[random_number]));
-                    
+                    //stringbuilder_saveLabels.Append(i).Append(Utilities.getLabel(file_dialog_labelsPath.FileName, all_files[random_number]));
+                    stringbuilder_saveLabels.AppendLine(Utilities.findLabel(all_files[random_number]));
 
                     all_files.RemoveAt(random_number);
                 }
@@ -168,7 +171,8 @@ namespace DRG
                     list_test_images.Add(all_files[random_number]);
                     System.IO.File.Copy(all_files[random_number], folder_dialog_savePath.FileName + "\\generated_DB\\test\\" + all_files[random_number].Split('\\')[all_files[random_number].Split('\\').Count() - 1]);
 
-                    stringbuilder_saveLabels.Append(i).Append(Utilities.getLabel(file_dialog_labelsPath.FileName, all_files[random_number]));
+                    //stringbuilder_saveLabels.Append(i).Append(Utilities.getLabel(file_dialog_labelsPath.FileName, all_files[random_number]));
+                    stringbuilder_saveLabels.AppendLine(Utilities.findLabel(all_files[random_number]));
 
                     all_files.RemoveAt(random_number);
                 }
@@ -184,8 +188,12 @@ namespace DRG
 
                         list_validation_images.Add(all_files[random_number]);
                         System.IO.File.Copy(all_files[random_number], folder_dialog_savePath.FileName + "\\generated_DB\\validation\\" + all_files[random_number].Split('\\')[all_files[random_number].Split('\\').Count() - 1]);
+                        stringbuilder_saveLabels.AppendLine(Utilities.findLabel(all_files[random_number]));
+
                         all_files.RemoveAt(random_number);
                     }
+                    File.AppendAllText(folder_dialog_savePath.FileName + "\\generated_DB\\validation.txt", stringbuilder_saveLabels.ToString());
+                    stringbuilder_saveLabels.Clear();
                 }
             }
         }
