@@ -5,24 +5,29 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DRG"
         mc:Ignorable="d"
-        Title="DRG - Dataset Random Generator" Height="340" Width="475" ResizeMode="NoResize">
+        Title="DRG - Dataset Random Generator" Height="340" Width="475">
     <DockPanel>
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Vertical" Margin="20" VerticalAlignment="Top">
-                <StackPanel Orientation="Horizontal" Margin=" 0 0 0 10">
+                <DockPanel Margin=" 0 0 0 10" Height="25">
                     <Button x:Name="btn_imageFolder" Width="120" Click="btn_imageFolder_Click">Select images folder</Button>
-                    <TextBlock x:Name="textblock_imageFolder" Margin="20 0 20 0" VerticalAlignment="Center"></TextBlock>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
+                    <TextBlock x:Name="textblock_imageFolder" Margin="20 0 20 0" VerticalAlignment="Center" Background="Transparent" TextTrimming="CharacterEllipsis" ></TextBlock>
+                </DockPanel>
+                <DockPanel Height="25">
                     <Button x:Name="btn_labels" Width="120" Click="btn_labels_Click">Select labels file</Button>
-                    <TextBlock x:Name="textblock_labelsFile" Margin="20 0 20 0" VerticalAlignment="Center"></TextBlock>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="0 20 0 0">
-                    <CheckBox x:Name="checkbox_Validation" IsChecked="True" Checked="checkbox_Validation_Checked" Unchecked="checkbox_Validation_Unchecked">Validation?</CheckBox>
-                </StackPanel>
+                    <TextBlock x:Name="textblock_labelsFile" Margin="20 0 20 0" VerticalAlignment="Center" Background="Transparent" TextTrimming="CharacterEllipsis" ></TextBlock>
+                </DockPanel>
+                <DockPanel Margin="0 20 0 0" Height="25">
+                    <CheckBox x:Name="checkbox_Validation" IsChecked="True" VerticalAlignment="Center" Checked="checkbox_Validation_Checked" Unchecked="checkbox_Validation_Unchecked">Validation?</CheckBox>
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" VerticalAlignment="Center" HorizontalAlignment="Right">
+                        <RadioButton Margin="30 0 10 0">Images and Labels</RadioButton>
+                        <RadioButton Margin="0 0 10 0">Images only</RadioButton>
+                        <RadioButton Margin="0 0 10 0">Labels only</RadioButton>
+                    </StackPanel>
+                </DockPanel>
             </StackPanel>
             <StackPanel Margin="0 10 0 0">
-                
+
                 <StackPanel Orientation="Horizontal" Margin="0 0 0 20">
                     <TextBlock Margin="0 0 20 0" Width="70" TextAlignment="Right">Train:</TextBlock>
                     <Slider x:Name="slider_Train" Orientation="Horizontal" Minimum="0" Maximum="100"  Width="300" Value="85" IsSnapToTickEnabled="True" TickFrequency="1" MouseMove="slider_Train_MouseMove"/>
