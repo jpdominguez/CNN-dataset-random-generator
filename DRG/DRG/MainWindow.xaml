@@ -5,46 +5,50 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DRG"
         mc:Ignorable="d"
-        Title="DRG - Dataset Random Generator" Height="340" Width="475">
-    <DockPanel>
-        <StackPanel Orientation="Vertical">
-            <StackPanel Orientation="Vertical" Margin="20" VerticalAlignment="Top">
-                <DockPanel Margin=" 0 0 0 10" Height="25">
-                    <Button x:Name="btn_imageFolder" Width="120" Click="btn_imageFolder_Click">Select images folder</Button>
-                    <TextBlock x:Name="textblock_imageFolder" Margin="20 0 20 0" VerticalAlignment="Center" Background="Transparent" TextTrimming="CharacterEllipsis" ></TextBlock>
-                </DockPanel>
-                <DockPanel Height="25">
-                    <Button x:Name="btn_labels" Width="120" Click="btn_labels_Click">Select labels file</Button>
-                    <TextBlock x:Name="textblock_labelsFile" Margin="20 0 20 0" VerticalAlignment="Center" Background="Transparent" TextTrimming="CharacterEllipsis" ></TextBlock>
-                </DockPanel>
-                <DockPanel Margin="0 20 0 0" Height="25">
-                    <CheckBox x:Name="checkbox_Validation" IsChecked="True" VerticalAlignment="Center" Checked="checkbox_Validation_Checked" Unchecked="checkbox_Validation_Unchecked">Validation?</CheckBox>
-                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" VerticalAlignment="Center" HorizontalAlignment="Right">
-                        <RadioButton Margin="30 0 10 0">Images and Labels</RadioButton>
-                        <RadioButton Margin="0 0 10 0">Images only</RadioButton>
-                        <RadioButton Margin="0 0 10 0">Labels only</RadioButton>
-                    </StackPanel>
-                </DockPanel>
-            </StackPanel>
-            <StackPanel Margin="0 10 0 0">
+        x:Name="mainWindow_canvas"
+        Title="DRG - Dataset Random Generator" Height="375" Width="500" MinHeight="375" MinWidth="500">
+    <DockPanel x:Name="mainDock" SizeChanged="mainDock_SizeChanged">
+        <DockPanel Margin="20" VerticalAlignment="Top" DockPanel.Dock="Top">
+            <DockPanel Margin=" 0 0 0 10" Height="25" DockPanel.Dock="Top">
+                <Button x:Name="btn_imageFolder" Width="120" Click="btn_imageFolder_Click" >Select images folder</Button>
+                <TextBlock x:Name="textblock_imageFolder" Margin="20 0 20 0" VerticalAlignment="Center" Background="Transparent" TextTrimming="CharacterEllipsis" ></TextBlock>
+            </DockPanel>
+            <DockPanel Height="25" DockPanel.Dock="Top">
+                <Button x:Name="btn_labels" Width="120" Click="btn_labels_Click">Select labels file</Button>
+                <TextBlock x:Name="textblock_labelsFile" Margin="20 0 20 0" VerticalAlignment="Center" Background="Transparent" TextTrimming="CharacterEllipsis" ></TextBlock>
+            </DockPanel>
+            <DockPanel Margin="0 20 0 0" Height="25" DockPanel.Dock="Top">
+                <CheckBox x:Name="checkbox_Validation" IsChecked="True" VerticalAlignment="Center" Checked="checkbox_Validation_Checked" Unchecked="checkbox_Validation_Unchecked">Validation?</CheckBox>
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" VerticalAlignment="Center" HorizontalAlignment="Right">
+                    <RadioButton x:Name="radioButton_IandL" Margin="30 0 10 0" IsChecked="True" x:FieldModifier="public">Images and Labels</RadioButton>
+                    <RadioButton x:Name="radioButton_I" Margin="0 0 10 0" x:FieldModifier="public" Checked="radioButton_I_Checked" Unchecked="radioButton_I_Unchecked">Images only</RadioButton>
+                </StackPanel>
+            </DockPanel>
+        </DockPanel>
+        <DockPanel Margin="0 10 0 0" DockPanel.Dock="Top" LastChildFill="True">
 
-                <StackPanel Orientation="Horizontal" Margin="0 0 0 20">
-                    <TextBlock Margin="0 0 20 0" Width="70" TextAlignment="Right">Train:</TextBlock>
-                    <Slider x:Name="slider_Train" Orientation="Horizontal" Minimum="0" Maximum="100"  Width="300" Value="85" IsSnapToTickEnabled="True" TickFrequency="1" MouseMove="slider_Train_MouseMove"/>
-                    <TextBlock Text="{Binding ElementName=slider_Train,Path=Value, StringFormat={}{0}%}" Margin="10 0 0 0"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="0 0 0 20" x:Name="stackpanel_Validation">
-                    <TextBlock Margin="0 0 20 0" Width="70" TextAlignment="Right">Validation:</TextBlock>
-                    <Slider x:Name="slider_Validation" Orientation="Horizontal" Minimum="0" Maximum="100" Width="300" Value="0" IsSnapToTickEnabled="True" TickFrequency="1" MouseMove="slider_Validation_MouseMove"></Slider>
-                    <TextBlock Text="{Binding ElementName=slider_Validation,Path=Value, StringFormat={}{0}%}" Margin="10 0 0 0"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="0 0 0 20">
-                    <TextBlock Margin="0 0 20 0" Width="70" TextAlignment="Right">Test:</TextBlock>
-                    <Slider x:Name="slider_Test" Orientation="Horizontal" Minimum="0" Maximum="100" Width="300" Value="15" IsSnapToTickEnabled="True" TickFrequency="1" MouseMove="slider_Test_MouseMove"/>
-                    <TextBlock Text="{Binding ElementName=slider_Test,Path=Value, StringFormat={}{0}%}" Margin="10 0 0 0"/>
-                </StackPanel>
-            </StackPanel>
-            <Button x:Name="button_Launch" Width="100" Height="30" Click="button_Launch_Click" >Launch</Button>
-        </StackPanel>
+            <DockPanel DockPanel.Dock="Left">
+                <TextBlock Margin="0 0 20 22" Width="70" TextAlignment="Right" DockPanel.Dock="Top">Train:</TextBlock>
+                <TextBlock x:Name="label_validationName" Margin="0 0 20 22" Width="70" TextAlignment="Right" DockPanel.Dock="Top">Validation:</TextBlock>
+                <TextBlock Margin="0 0 20 22" Width="70" TextAlignment="Right" DockPanel.Dock="Top">Test:</TextBlock>
+            </DockPanel>
+
+
+
+            <DockPanel DockPanel.Dock="Right" Margin="5 0 0 0" MinWidth="50">
+                <TextBlock Text="{Binding ElementName=slider_Train,Path=Value, StringFormat={}{0}%}" Margin="10 0 0 22" DockPanel.Dock="Top"/>
+                <TextBlock x:Name="label_validationValue" Text="{Binding ElementName=slider_Validation,Path=Value, StringFormat={}{0}%}" Margin="10 0 0 22" DockPanel.Dock="Top"/>
+                <TextBlock Text="{Binding ElementName=slider_Test,Path=Value, StringFormat={}{0}%}" Margin="10 0 0 22" DockPanel.Dock="Top"/>
+            </DockPanel>
+
+            <DockPanel DockPanel.Dock="Left" Margin="0 0 5 0">
+                <Slider x:Name="slider_Train" Margin="0 0 0 20"  Orientation="Horizontal" Minimum="0" Maximum="100"  Value="85" IsSnapToTickEnabled="True" TickFrequency="1" MouseMove="slider_Train_MouseMove" DockPanel.Dock="Top"/>
+                <Slider x:Name="slider_Validation" Margin="0 0 0 20" Orientation="Horizontal" Minimum="0" Maximum="100" Value="0" IsSnapToTickEnabled="True" TickFrequency="1" MouseMove="slider_Validation_MouseMove" DockPanel.Dock="Top"></Slider>
+                <Slider x:Name="slider_Test" Margin="0 0 0 20" Orientation="Horizontal" Minimum="0" Maximum="100" Value="15" IsSnapToTickEnabled="True" TickFrequency="1" MouseMove="slider_Test_MouseMove" DockPanel.Dock="Top"/>
+            </DockPanel>
+
+
+        </DockPanel>
+        <Button DockPanel.Dock="Bottom" x:Name="button_Launch" Margin="0 0 0 20" Width="100" Height="30" Click="button_Launch_Click" VerticalAlignment="Bottom">Launch</Button>
     </DockPanel>
 </Window>

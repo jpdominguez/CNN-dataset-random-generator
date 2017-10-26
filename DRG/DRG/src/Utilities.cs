@@ -52,7 +52,7 @@ namespace DRG.src
             if (lines.Any(x => x.Contains(imageName.Split('\\')[imageName.Split('\\').Count() - 1])))
             {
                 var ind = lines.FindIndex(x => x.Contains(imageName.Split('\\')[imageName.Split('\\').Count() - 1]));
-                
+
                 label_res = lines.ElementAt(ind);
                 lines.RemoveAt(ind);
             }

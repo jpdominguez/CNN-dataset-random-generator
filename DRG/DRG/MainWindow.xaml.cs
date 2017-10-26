@@ -39,8 +39,6 @@ namespace DRG
 
             textblock_imageFolder.Text = "No file selected";
             textblock_labelsFile.Text = "No file selected";
-
-            Utilities.labelsList_used = new List<string>();
         }
 
         #region EventHandlers
@@ -73,6 +71,8 @@ namespace DRG
             if (IsLoaded)
             {
                 slider_Validation.IsEnabled = true;
+                label_validationValue.Foreground = System.Windows.Media.Brushes.Black;
+                label_validationName.Foreground = System.Windows.Media.Brushes.Black;
             }
         }
 
@@ -84,6 +84,8 @@ namespace DRG
                 slider_Test.Value = 100 - slider_Train.Value - slider_Validation.Value;
                 slider_Train.Value = 100 - slider_Test.Value - slider_Validation.Value;
                 slider_Validation.IsEnabled = false;
+                label_validationValue.Foreground = System.Windows.Media.Brushes.LightGray;
+                label_validationName.Foreground = System.Windows.Media.Brushes.LightGray;
             }
         }
 
@@ -127,8 +129,9 @@ namespace DRG
                     Utilities.grant_access(folder_dialog_savePath.FileName + "\\generated_DB\\validation");
                 }
 
-                File.Copy(file_dialog_labelsPath.FileName, file_dialog_labelsPath.FileName + "_bkp");
-                Utilities.getLabels(file_dialog_labelsPath.FileName);
+                //File.Copy(file_dialog_labelsPath.FileName, file_dialog_labelsPath.FileName + "_bkp");
+                if (radioButton_I.IsChecked == true)
+                    Utilities.getLabels(file_dialog_labelsPath.FileName);
 
 
                 var files_in_path = Directory.GetFiles(folder_dialog_imagesPath.FileName, "*.*", SearchOption.AllDirectories).Where(s => s.Contains(System.IO.Path.GetExtension(".jpg")) || s.Contains(System.IO.Path.GetExtension(".png")));
@@ -152,17 +155,18 @@ namespace DRG
                     random_number = rnd.Next(all_files.Count());
 
                     list_train_images.Add(all_files[random_number]);
-                    System.IO.File.Copy(all_files[random_number], folder_dialog_savePath.FileName + "\\generated_DB\\train\\" + all_files[random_number].Split('\\')[all_files[random_number].Split('\\').Count()-1]);
+                    System.IO.File.Copy(all_files[random_number], folder_dialog_savePath.FileName + "\\generated_DB\\train\\" + all_files[random_number].Split('\\')[all_files[random_number].Split('\\').Count() - 1]);
 
-
-                    //stringbuilder_saveLabels.Append(i).Append(Utilities.getLabel(file_dialog_labelsPath.FileName, all_files[random_number]));
-                    stringbuilder_saveLabels.AppendLine(Utilities.findLabel(all_files[random_number]));
+                    if (radioButton_I.IsChecked == true)
+                        stringbuilder_saveLabels.AppendLine(Utilities.findLabel(all_files[random_number]));
 
                     all_files.RemoveAt(random_number);
                 }
-
-                File.AppendAllText(folder_dialog_savePath.FileName + "\\generated_DB\\train.txt", stringbuilder_saveLabels.ToString());
-                stringbuilder_saveLabels.Clear();
+                if (radioButton_I.IsChecked == true)
+                {
+                    File.AppendAllText(folder_dialog_savePath.FileName + "\\generated_DB\\train.txt", stringbuilder_saveLabels.ToString());
+                    stringbuilder_saveLabels.Clear();
+                }
 
                 for (int i = 0; i < number_testImages; i++)
                 {
@@ -172,13 +176,16 @@ namespace DRG
                     System.IO.File.Copy(all_files[random_number], folder_dialog_savePath.FileName + "\\generated_DB\\test\\" + all_files[random_number].Split('\\')[all_files[random_number].Split('\\').Count() - 1]);
 
                     //stringbuilder_saveLabels.Append(i).Append(Utilities.getLabel(file_dialog_labelsPath.FileName, all_files[random_number]));
-                    stringbuilder_saveLabels.AppendLine(Utilities.findLabel(all_files[random_number]));
+                    if (radioButton_I.IsChecked == true)
+                        stringbuilder_saveLabels.AppendLine(Utilities.findLabel(all_files[random_number]));
 
                     all_files.RemoveAt(random_number);
                 }
-
-                File.AppendAllText(folder_dialog_savePath.FileName + "\\generated_DB\\test.txt", stringbuilder_saveLabels.ToString());
-                stringbuilder_saveLabels.Clear();
+                if (radioButton_I.IsChecked == true)
+                {
+                    File.AppendAllText(folder_dialog_savePath.FileName + "\\generated_DB\\test.txt", stringbuilder_saveLabels.ToString());
+                    stringbuilder_saveLabels.Clear();
+                }
 
                 if (checkbox_Validation.IsChecked == true)
                 {
@@ -188,14 +195,84 @@ namespace DRG
 
                         list_validation_images.Add(all_files[random_number]);
                         System.IO.File.Copy(all_files[random_number], folder_dialog_savePath.FileName + "\\generated_DB\\validation\\" + all_files[random_number].Split('\\')[all_files[random_number].Split('\\').Count() - 1]);
-                        stringbuilder_saveLabels.AppendLine(Utilities.findLabel(all_files[random_number]));
+                        if (radioButton_I.IsChecked == true)
+                            stringbuilder_saveLabels.AppendLine(Utilities.findLabel(all_files[random_number]));
 
                         all_files.RemoveAt(random_number);
                     }
-                    File.AppendAllText(folder_dialog_savePath.FileName + "\\generated_DB\\validation.txt", stringbuilder_saveLabels.ToString());
-                    stringbuilder_saveLabels.Clear();
+                    if (radioButton_I.IsChecked == true)
+                        File.AppendAllText(folder_dialog_savePath.FileName + "\\generated_DB\\validation.txt", stringbuilder_saveLabels.ToString());
                 }
             }
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            mainDock.Width = e.NewSize.Width;
+            mainDock.Height = e.NewSize.Height;
+
+            double xChange = 1, yChange = 1;
+
+            if (e.PreviousSize.Width != 0)
+                xChange = (e.NewSize.Width / e.PreviousSize.Width);
+
+            if (e.PreviousSize.Height != 0)
+                yChange = (e.NewSize.Height / e.PreviousSize.Height);
+
+            foreach (FrameworkElement fe in mainDock.Children)
+            {
+                /*because I didn't want to resize the grid I'm having inside the canvas in this particular instance. (doing that from xaml) */
+                if (fe is Grid == false)
+                {
+                    fe.Height = fe.ActualHeight * yChange;
+                    fe.Width = fe.ActualWidth * xChange;
+
+                    Canvas.SetTop(fe, Canvas.GetTop(fe) * yChange);
+                    Canvas.SetLeft(fe, Canvas.GetLeft(fe) * xChange);
+
+                }
+            }
+        }
+
+        private void mainDock_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            //mainDock.Width = e.NewSize.Width;
+            //mainDock.Height = e.NewSize.Height;
+
+            //double xChange = 1, yChange = 1;
+
+            //if (e.PreviousSize.Width != 0)
+            //    xChange = (e.NewSize.Width / e.PreviousSize.Width);
+
+            //if (e.PreviousSize.Height != 0)
+            //    yChange = (e.NewSize.Height / e.PreviousSize.Height);
+
+            //foreach (FrameworkElement fe in mainDock.Children)
+            //{
+            //    /*because I didn't want to resize the grid I'm having inside the canvas in this particular instance. (doing that from xaml) */
+            //    if (fe is Grid == false)
+            //    {
+            //        fe.Height = fe.ActualHeight * yChange;
+            //        fe.Width = fe.ActualWidth * xChange;
+
+            //        Canvas.SetTop(fe, Canvas.GetTop(fe) * yChange);
+            //        Canvas.SetLeft(fe, Canvas.GetLeft(fe) * xChange);
+
+            //    }
+            //}
+        }
+
+        private void radioButton_I_Checked(object sender, RoutedEventArgs e)
+        {
+            btn_labels.IsEnabled = false;
+            textblock_labelsFile.Text = "No file selected";
+            textblock_labelsFile.Foreground = System.Windows.Media.Brushes.LightGray;
+        }
+
+        private void radioButton_I_Unchecked(object sender, RoutedEventArgs e)
+        {
+            btn_labels.IsEnabled = true;
+            textblock_labelsFile.Foreground = System.Windows.Media.Brushes.Black;
         }
     }
 }
