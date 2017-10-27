@@ -130,7 +130,7 @@ namespace DRG
                 }
 
                 //File.Copy(file_dialog_labelsPath.FileName, file_dialog_labelsPath.FileName + "_bkp");
-                if (radioButton_I.IsChecked == true)
+                if (radioButton_I.IsChecked == false)
                     Utilities.getLabels(file_dialog_labelsPath.FileName);
 
 
@@ -157,12 +157,12 @@ namespace DRG
                     list_train_images.Add(all_files[random_number]);
                     System.IO.File.Copy(all_files[random_number], folder_dialog_savePath.FileName + "\\generated_DB\\train\\" + all_files[random_number].Split('\\')[all_files[random_number].Split('\\').Count() - 1]);
 
-                    if (radioButton_I.IsChecked == true)
+                    if (radioButton_I.IsChecked == false)
                         stringbuilder_saveLabels.AppendLine(Utilities.findLabel(all_files[random_number]));
 
                     all_files.RemoveAt(random_number);
                 }
-                if (radioButton_I.IsChecked == true)
+                if (radioButton_I.IsChecked == false)
                 {
                     File.AppendAllText(folder_dialog_savePath.FileName + "\\generated_DB\\train.txt", stringbuilder_saveLabels.ToString());
                     stringbuilder_saveLabels.Clear();
@@ -175,13 +175,12 @@ namespace DRG
                     list_test_images.Add(all_files[random_number]);
                     System.IO.File.Copy(all_files[random_number], folder_dialog_savePath.FileName + "\\generated_DB\\test\\" + all_files[random_number].Split('\\')[all_files[random_number].Split('\\').Count() - 1]);
 
-                    //stringbuilder_saveLabels.Append(i).Append(Utilities.getLabel(file_dialog_labelsPath.FileName, all_files[random_number]));
-                    if (radioButton_I.IsChecked == true)
+                    if (radioButton_I.IsChecked == false)
                         stringbuilder_saveLabels.AppendLine(Utilities.findLabel(all_files[random_number]));
 
                     all_files.RemoveAt(random_number);
                 }
-                if (radioButton_I.IsChecked == true)
+                if (radioButton_I.IsChecked == false)
                 {
                     File.AppendAllText(folder_dialog_savePath.FileName + "\\generated_DB\\test.txt", stringbuilder_saveLabels.ToString());
                     stringbuilder_saveLabels.Clear();
@@ -195,12 +194,12 @@ namespace DRG
 
                         list_validation_images.Add(all_files[random_number]);
                         System.IO.File.Copy(all_files[random_number], folder_dialog_savePath.FileName + "\\generated_DB\\validation\\" + all_files[random_number].Split('\\')[all_files[random_number].Split('\\').Count() - 1]);
-                        if (radioButton_I.IsChecked == true)
+                        if (radioButton_I.IsChecked == false)
                             stringbuilder_saveLabels.AppendLine(Utilities.findLabel(all_files[random_number]));
 
                         all_files.RemoveAt(random_number);
                     }
-                    if (radioButton_I.IsChecked == true)
+                    if (radioButton_I.IsChecked == false)
                         File.AppendAllText(folder_dialog_savePath.FileName + "\\generated_DB\\validation.txt", stringbuilder_saveLabels.ToString());
                 }
             }
