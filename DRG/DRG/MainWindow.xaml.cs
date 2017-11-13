@@ -119,11 +119,17 @@ namespace DRG
             {
                 System.IO.Directory.CreateDirectory(folder_dialog_savePath.FileName + "\\generated_DB");
                 Utilities.grant_access(folder_dialog_savePath.FileName + "\\generated_DB");
-                System.IO.Directory.CreateDirectory(folder_dialog_savePath.FileName + "\\generated_DB\\train");
-                Utilities.grant_access(folder_dialog_savePath.FileName + "\\generated_DB\\train");
-                System.IO.Directory.CreateDirectory(folder_dialog_savePath.FileName + "\\generated_DB\\test");
-                Utilities.grant_access(folder_dialog_savePath.FileName + "\\generated_DB\\test");
-                if (checkbox_Validation.IsChecked == true)
+                if (slider_Train.Value > 0)
+                {
+                    System.IO.Directory.CreateDirectory(folder_dialog_savePath.FileName + "\\generated_DB\\train");
+                    Utilities.grant_access(folder_dialog_savePath.FileName + "\\generated_DB\\train");
+                }
+                if (slider_Test.Value > 0)
+                {
+                    System.IO.Directory.CreateDirectory(folder_dialog_savePath.FileName + "\\generated_DB\\test");
+                    Utilities.grant_access(folder_dialog_savePath.FileName + "\\generated_DB\\test");
+                }
+                if (checkbox_Validation.IsChecked == true && slider_Validation.Value > 0)
                 {
                     System.IO.Directory.CreateDirectory(folder_dialog_savePath.FileName + "\\generated_DB\\validation");
                     Utilities.grant_access(folder_dialog_savePath.FileName + "\\generated_DB\\validation");
@@ -150,6 +156,7 @@ namespace DRG
 
                 int random_number;
 
+                
                 for (int i = 0; i < number_trainImages; i++)
                 {
                     random_number = rnd.Next(all_files.Count());
@@ -162,7 +169,7 @@ namespace DRG
 
                     all_files.RemoveAt(random_number);
                 }
-                if (radioButton_I.IsChecked == false)
+                if (radioButton_I.IsChecked == false && slider_Train.Value > 0)
                 {
                     File.AppendAllText(folder_dialog_savePath.FileName + "\\generated_DB\\train.txt", stringbuilder_saveLabels.ToString());
                     stringbuilder_saveLabels.Clear();
@@ -180,13 +187,13 @@ namespace DRG
 
                     all_files.RemoveAt(random_number);
                 }
-                if (radioButton_I.IsChecked == false)
+                if (radioButton_I.IsChecked == false && slider_Test.Value > 0)
                 {
                     File.AppendAllText(folder_dialog_savePath.FileName + "\\generated_DB\\test.txt", stringbuilder_saveLabels.ToString());
                     stringbuilder_saveLabels.Clear();
                 }
 
-                if (checkbox_Validation.IsChecked == true)
+                if (checkbox_Validation.IsChecked == true && slider_Validation.Value > 0)
                 {
                     for (int i = 0; i < number_validationImages; i++)
                     {

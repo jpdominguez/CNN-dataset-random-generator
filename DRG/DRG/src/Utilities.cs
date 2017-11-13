@@ -13,6 +13,7 @@ namespace DRG.src
     {
         public static List<string> labelsList;
         public static List<string> labelsList_used;
+        public static HashSet<string> labelsHashSet;
 
         public static void grant_access(string fullPath)
         {
@@ -22,77 +23,25 @@ namespace DRG.src
             dInfo.SetAccessControl(dSecurity);
         }
 
-        public static string getLabel(string path, string imageName)
-        {
-            //StreamReader reader = new StreamReader(path);
-            //List<String> lines = new List<string>();
-            //StringBuilder lines = new StringBuilder();
-            string label_res = "NULL";
-            string buffer = string.Empty;
-            /*
-            using (StreamReader reader = new StreamReader(path, true))
-            {
-                while (!reader.EndOfStream)
-                {
-                    buffer = reader.ReadLine();
-
-                    if (buffer.Contains(imageName.Split('\\')[imageName.Split('\\').Count() - 1]))
-                    {
-                        label_res = buffer;
-                    }
-                    else
-                    {
-                        lines.AppendLine(buffer);
-                    }
-                }
-            }
-            */
-            List<string> lines = File.ReadAllLines(path).ToList();
-
-            if (lines.Any(x => x.Contains(imageName.Split('\\')[imageName.Split('\\').Count() - 1])))
-            {
-                var ind = lines.FindIndex(x => x.Contains(imageName.Split('\\')[imageName.Split('\\').Count() - 1]));
-
-                label_res = lines.ElementAt(ind);
-                lines.RemoveAt(ind);
-            }
-
-            //reader.Close();
-            //reader.Dispose();
-            //File.Delete(path);
-            //StreamWriter writer = new StreamWriter(path);
-            /*
-            using (StreamWriter writer = new StreamWriter(path, true))
-            {
-                writer.(lines.ToString());
-            }
-                */
-
-            File.Delete(path);
-            File.AppendAllLines(path, lines);
-            //File.WriteAllLines(path, lines.ToArray());
-            return label_res;
-        }
-
-
-
         public static void getLabels(string path)
         {
             labelsList = File.ReadAllLines(path).ToList();
+            labelsList.Sort();
+            labelsHashSet = new HashSet<string>(labelsList);
         }
 
         public static string findLabel(string imageName)
         {
-            var ind = labelsList.FindIndex(x => x.Contains(imageName.Split('\\')[imageName.Split('\\').Count() - 1]));
-            //var ind = labelsList.Find(x => !labelsList_used.Contains(x) && x.Contains(imageName.Split('\\')[imageName.Split('\\').Count() - 1]));
+            //var ind = labelsList.FindIndex(x => x.Contains(imageName.Split('\\')[imageName.Split('\\').Count() - 1]));
+            //var res = labelsList.ElementAt(ind);
+            //labelsList.RemoveAt(ind);
+            //var res = labelsHashSet.Select((s, i) => new { i, s }).Where(x => x.s.StartsWith(imageName.Split('\\')[imageName.Split('\\').Count() - 1])).Select(t => t.i).ToList();
+            string resultado;
+            var res = labelsHashSet.Where(x => x.StartsWith(imageName.Split('\\')[imageName.Split('\\').Count() - 1]));
+            resultado = res.ElementAt(0);
+            labelsHashSet.Remove(res.ElementAt(0));
 
-
-            //var ind2 = labelsList.Select((Value, Index) => new { Value, Index }).Single(p => !labelsList_used.Contains(p.Value) && p.Value.Contains(imageName.Split('\\')[imageName.Split('\\').Count() - 1]));
-            //labelsList_used.Add(ind);
-            //labelsList.RemoveAt(ind2.Index);
-            var res = labelsList.ElementAt(ind);
-            labelsList.RemoveAt(ind);
-            return res;
+            return resultado; // ElementAt(0);
         }
     }
 }
