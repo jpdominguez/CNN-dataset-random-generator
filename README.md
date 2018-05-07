@@ -27,7 +27,7 @@ The following step-by-step guide will show you how to download, install and star
 </p>
 
 <p align="justify">
-In addition to Microsoft .NET Framework 4.5 or greater, the DRG' Visual Studio project requires <a href="http://www.visualstudio.com">Microsoft Visual Studio</a> to compile the code (DRG was programmed using Visual Studio Community 2017). This is only needed if you want to tweak the code. If you just want to use DRG as it is, please follow the steps below.
+In addition to Microsoft .NET Framework 4.5 or greater, the DRG's Visual Studio project requires <a href="http://www.visualstudio.com">Microsoft Visual Studio</a> to compile the code (DRG was programmed using Visual Studio Community 2017). This is only needed if you want to tweak the code. If you just want to use DRG as it is, please follow the steps below.
 </p>
 
 <h3>Installation</h3>
